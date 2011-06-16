@@ -41,6 +41,8 @@ sub import {
 
 sub init_logging {
     my $app_name = shift;
+    $app_name = shift if $app_name eq __PACKAGE__;
+    $app_name ||= $ENV{MOJO_APP};
 
     my @Confdirs = $ENV{HARNESS_ACTIVE} ?
         ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
