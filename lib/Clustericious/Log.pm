@@ -70,7 +70,6 @@ sub init_logging {
         $l4p_dir  = first { -d $_ && (-e "$_/log4perl.conf" || -e "$app_name.log4perl.conf") } @Confdirs;
         $l4p_pat  = "[%d] [%Z %H %P] %5p: %m%n";
         $l4p_file = first {-e "$l4p_dir/$_"} ("$app_name.log4perl.conf", "log4perl.conf");
-        warn "app $app_name, file $l4p_file";
     }
 
     Log::Log4perl::Layout::PatternLayout::add_global_cspec('Z', sub {$app_name});
