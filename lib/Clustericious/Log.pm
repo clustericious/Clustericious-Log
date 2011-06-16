@@ -36,7 +36,6 @@ sub import {
         _init_logging($app_name);
     }
     no strict 'refs';
-    warn "class is $caller";
     *{"${caller}::$_"} = *{"${class}::$_"} for qw/TRACE DEBUG ERROR WARN FATAL LOGDIE/;
 }
 
