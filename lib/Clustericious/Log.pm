@@ -30,16 +30,16 @@ our $VERSION = '0.01';
 
 sub import {
     my $class = shift;
-    my $caller = caller;
+    my $dest = caller;
     my %args = @_;
     if (my $app_name = $args{-init_logging}) {
-        _init_logging($app_name);
+        init_logging($app_name);
     }
     no strict 'refs';
-    *{"${caller}::$_"} = *{"${class}::$_"} for qw/TRACE DEBUG ERROR WARN FATAL LOGDIE/;
+    *{"${dest}::$_"} = *{"${class}::$_"} for qw/TRACE INFO DEBUG ERROR WARN FATAL LOGDIE/;
 }
 
-sub _init_logging {
+sub init_logging {
     my $app_name = shift;
 
     my @Confdirs = $ENV{HARNESS_ACTIVE} ?
@@ -51,17 +51,20 @@ sub _init_logging {
 
     my $l4p_dir; # dir with log config file.
     my $l4p_pat; # pattern for screen logging
+    my $l4p_file; # file (global or app specific)
 
     if ($ENV{HARNESS_ACTIVE}) {
         $l4p_pat = "# %5p: %m%n";
     } else  {
-        $l4p_dir  = first { -d $_ && -e "$_/log4perl.conf"  } @Confdirs;
+        $l4p_dir  = first { -d $_ && (-e "$_/log4perl.conf" || -e "$app_name.log4perl.conf") } @Confdirs;
         $l4p_pat  = "[%d] [%Z %H %P] %5p: %m%n";
+        $l4p_file = first {-e "$l4p_dir/$_"} ("$app_name.log4perl.conf", "log4perl.conf");
+        warn "app $app_name, file $l4p_file";
     }
 
     Log::Log4perl::Layout::PatternLayout::add_global_cspec('Z', sub {$app_name});
 
-    my $logger = MojoX::Log::Log4perl->new( $l4p_dir ? "$l4p_dir/log4perl.conf":
+    my $logger = MojoX::Log::Log4perl->new( $l4p_dir ? "$l4p_dir/$l4p_file":
       { # default config
        ($ENV{LOG_FILE} ? (
           "log4perl.rootLogger"              => "$ENV{LOG_LEVEL}, File1",
@@ -82,7 +85,7 @@ sub _init_logging {
     });
 
     INFO("Initialized logger");
-    INFO("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
+    INFO("Log config found : $l4p_dir/$l4p_file") if $l4p_dir;
     # warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
 }
 
