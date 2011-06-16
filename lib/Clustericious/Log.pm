@@ -1,110 +1,90 @@
 package Clustericious::Log;
 
+use List::Util qw/first/;
+use Log::Log4perl qw/:easy/;
+use MojoX::Log::Log4perl;
+
 use warnings;
 use strict;
 
 =head1 NAME
 
-Clustericious::Log - The great new Clustericious::Log!
+Clustericious::Log - Manage logging for clustericious CIs.
 
-=head1 VERSION
+=cut
 
-Version 0.01
+=head1 SYNOPSIS
+
+use Clustericious::Log -init_logging => "appname";
+
+=head1 DESCRIPTION
+
+Uses log4perl to do logging, and looks for log4perl.conf
+in several predefined directories.
+
+Also imports TRACE DEBUG ERROR, etc. like using Log::Log4perl qw/:easy/;
 
 =cut
 
 our $VERSION = '0.01';
 
-
-=head1 SYNOPSIS
-
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
-    use Clustericious::Log;
-
-    my $foo = Clustericious::Log->new();
-    ...
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 SUBROUTINES/METHODS
-
-=head2 function1
-
-=cut
-
-sub function1 {
+sub import {
+    my $class = shift;
+    my $caller = caller;
+    my %args = @_;
+    if (my $app_name = $args{-init_logging}) {
+        _init_logging($app_name);
+    }
+    no strict 'refs';
+    warn "class is $caller";
+    *{"${caller}::$_"} = *{"${class}::$_"} for qw/TRACE DEBUG ERROR WARN FATAL LOGDIE/;
 }
 
-=head2 function2
+sub _init_logging {
+    my $app_name = shift;
 
-=cut
+    my @Confdirs = $ENV{HARNESS_ACTIVE} ?
+        ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
+        ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
 
-sub function2 {
+    # Logging
+    $ENV{LOG_LEVEL} ||= ( $ENV{HARNESS_ACTIVE} ? "WARN" : "DEBUG" );
+
+    my $l4p_dir; # dir with log config file.
+    my $l4p_pat; # pattern for screen logging
+
+    if ($ENV{HARNESS_ACTIVE}) {
+        $l4p_pat = "# %5p: %m%n";
+    } else  {
+        $l4p_dir  = first { -d $_ && -e "$_/log4perl.conf"  } @Confdirs;
+        $l4p_pat  = "[%d] [%Z %H %P] %5p: %m%n";
+    }
+
+    Log::Log4perl::Layout::PatternLayout::add_global_cspec('Z', sub {$app_name});
+
+    my $logger = MojoX::Log::Log4perl->new( $l4p_dir ? "$l4p_dir/log4perl.conf":
+      { # default config
+       ($ENV{LOG_FILE} ? (
+          "log4perl.rootLogger"              => "$ENV{LOG_LEVEL}, File1",
+          "log4perl.appender.File1"          => "Log::Log4perl::Appender::File",
+          "log4perl.appender.File1.layout"   => "PatternLayout",
+          "log4perl.appender.File1.filename" => "$ENV{LOG_FILE}",
+          "log4perl.appender.File1.layout.ConversionPattern" => "[%d] [%Z %H %P] %5p: %m%n",
+        ):(
+          "log4perl.rootLogger"               => "$ENV{LOG_LEVEL}, SCREEN",
+          "log4perl.appender.SCREEN"          => "Log::Log4perl::Appender::Screen",
+          "log4perl.appender.SCREEN.layout"   => "PatternLayout",
+          "log4perl.appender.SCREEN.layout.ConversionPattern" => "$l4p_pat",
+       )),
+      # These categories (%c) are too verbose by default :
+       "log4perl.logger.Mojolicious"                     => "WARN",
+       "log4perl.logger.Mojolicious.Plugin.RequestTimer" => "WARN",
+       "log4perl.logger.MojoX.Dispatcher.Routes"         => "WARN",
+    });
+
+    INFO("Initialized logger");
+    INFO("Log config found in $l4p_dir/log4perl.conf") if $l4p_dir;
+    # warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
 }
 
-=head1 AUTHOR
-
-Brian Duggan, C<< <brian.duggan at nasa.gov> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-clustericious-log at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Clustericious-Log>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Clustericious::Log
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Clustericious-Log>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Clustericious-Log>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Clustericious-Log>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Clustericious-Log/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2011 Brian Duggan.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
-
-
-=cut
-
-1; # End of Clustericious::Log
+1;
