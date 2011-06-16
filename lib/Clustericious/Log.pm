@@ -39,6 +39,15 @@ sub import {
     *{"${dest}::$_"} = *{"${class}::$_"} for qw/TRACE INFO DEBUG ERROR WARN FATAL LOGDIE/;
 }
 
+=over
+
+=item init_logging
+
+Start logging.  Looks for log4perl.conf or $app.log4perl.conf
+in ~, ~/etc, /util/etc and /etc.
+
+=cut
+
 sub init_logging {
     my $app_name = shift;
     $app_name = shift if $app_name eq __PACKAGE__;
