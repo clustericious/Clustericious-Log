@@ -12,6 +12,11 @@ my $builder = Module::Build->new(
     },
     add_to_cleanup      => [ 'Clustericious-Log-*' ],
     create_makefile_pl => 'traditional',
+    requires => {
+        'Log::Log4perl' => 0,
+        'MojoX::Log::Log4perl' => 0,
+        'List::Util' => 0,
+    }
 );
 
 $builder->create_build_script();
