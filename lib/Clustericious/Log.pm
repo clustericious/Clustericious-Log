@@ -26,7 +26,7 @@ Also imports TRACE DEBUG ERROR, etc. like using Log::Log4perl qw/:easy/;
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub import {
     my $class = shift;
