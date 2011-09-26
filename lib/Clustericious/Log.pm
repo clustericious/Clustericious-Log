@@ -3,6 +3,7 @@ package Clustericious::Log;
 use List::Util qw/first/;
 use Log::Log4perl qw/:easy/;
 use MojoX::Log::Log4perl;
+use File::ReadBackwards;
 
 use warnings;
 use strict;
@@ -99,5 +100,33 @@ sub init_logging {
     # warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
     return $logger;
 }
+
+=item tail
+
+Returns a string with the last $n lines of the logfile.
+
+If multiple log files are defined, it only uses the first one alphabetically.
+
+=cut
+
+sub tail {
+    my $self = shift;
+    my %args = @_;
+    my $count = $args{lines} || 10;
+    my %appenders = %{ Log::Log4perl->appenders };
+    my ($first) = sort keys %appenders;
+    my $obj = $appenders{$first}->{appender};
+    $obj->can("filename") or return "no filename for appender $first";
+    my $filename = $obj->filename;
+    my $fp = File::ReadBackwards->new($filename) or return "Can't read $filename : $!";
+    my @lines;
+    my $line;
+    while ( defined( $line = $fp->readline ) ) {
+        push @lines, $line;
+        last if ( (0 + @lines) >= $count);
+    };
+    return join '', @lines;
+}
+
 
 1;

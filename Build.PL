@@ -16,6 +16,7 @@ my $builder = Module::Build->new(
         'Log::Log4perl' => 0,
         'MojoX::Log::Log4perl' => 0,
         'List::Util' => 0,
+        'File::ReadBackwards' => 0,
     }
 );
 
