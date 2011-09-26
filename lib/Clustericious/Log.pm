@@ -51,7 +51,7 @@ in ~, ~/etc, /util/etc and /etc.
 sub init_logging {
     my $app_name = shift;
     $app_name = shift if $app_name eq __PACKAGE__;
-    $app_name ||= $ENV{MOJO_APP};
+    $app_name = $ENV{MOJO_APP} unless $app_name && $app_name ne 'Clustericious::App';
 
     my @Confdirs = $ENV{HARNESS_ACTIVE} ?
         ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
@@ -97,6 +97,7 @@ sub init_logging {
     INFO("Initialized logger");
     INFO("Log config found : $l4p_dir/$l4p_file") if $l4p_dir;
     # warn "# started logging ($l4p_dir/log4perl.conf)\n" if $l4p_dir;
+    return $logger;
 }
 
 1;
