@@ -122,7 +122,7 @@ sub tail {
     my @lines;
     my $line;
     while ( defined( $line = $fp->readline ) ) {
-        push @lines, $line;
+        unshift @lines, $line;
         last if ( (0 + @lines) >= $count);
     };
     return join '', @lines;
