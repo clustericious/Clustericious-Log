@@ -5,6 +5,7 @@ WriteMakefile
           'NAME' => 'Clustericious::Log',
           'VERSION_FROM' => 'lib/Clustericious/Log.pm',
           'PREREQ_PM' => {
+                           'File::ReadBackwards' => 0,
                            'List::Util' => 0,
                            'Log::Log4perl' => 0,
                            'MojoX::Log::Log4perl' => 0,
