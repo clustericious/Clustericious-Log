@@ -21,9 +21,22 @@ use Clustericious::Log -init_logging => "appname";
 =head1 DESCRIPTION
 
 Uses log4perl to do logging, and looks for log4perl.conf
-in several predefined directories.
+in /etc, /util/etc, and $HOME/etc.
 
-Also imports TRACE DEBUG ERROR, etc. like using Log::Log4perl qw/:easy/;
+Also imports TRACE DEBUG ERROR, etc. like using Log::Log4perl qw/:easy/.
+
+=head1 EXAMPLE
+
+Here is a sample $HOME/etc/log4perl.conf :
+
+    log4perl.rootLogger=TRACE, LOGFILE
+    log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
+    log4perl.appender.LOGFILE.filename=/tmp/some.log
+    log4perl.appender.LOGFILE.mode=append
+    log4perl.appender.LOGFILE.layout=PatternLayout
+    log4perl.appender.LOGFILE.layout.ConversionPattern=[%d{HH:mm:ss}] [%8.8Z] %C (%F{1}+%L) %5p: %m%n
+
+=head1 METHODS
 
 =cut
 
@@ -70,7 +83,9 @@ sub init_logging {
     } else  {
         $l4p_dir  = first { -d $_ && (-e "$_/log4perl.conf" || -e "$app_name.log4perl.conf") } @Confdirs;
         $l4p_pat  = "[%d] [%Z %H %P] %5p: %m%n";
-        $l4p_file = first {-e "$l4p_dir/$_"} ("$app_name.log4perl.conf", "log4perl.conf");
+        if ($l4p_dir) {
+            $l4p_file = first {-e "$l4p_dir/$_"} ("$app_name.log4perl.conf", "log4perl.conf");
+        }
     }
 
     Log::Log4perl::Layout::PatternLayout::add_global_cspec('Z', sub {$app_name});
@@ -128,5 +143,12 @@ sub tail {
     return join '', @lines;
 }
 
+=back
+
+=head1 SEE ALSO
+
+Log::Log4perl
+
+=cut
 
 1;
