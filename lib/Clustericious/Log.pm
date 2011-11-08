@@ -62,10 +62,15 @@ in ~, ~/etc, /util/etc and /etc.
 
 =cut
 
+our $initPid;
 sub init_logging {
     my $app_name = shift;
     $app_name = shift if $app_name eq __PACKAGE__;
     $app_name = $ENV{MOJO_APP} unless $app_name && $app_name ne 'Clustericious::App';
+
+    # Force reinitialization after a fork
+    $Log::Log4perl::Logger::INITIALIZED = 0 if $initPid && $initPid != $$;
+    $initPid = $$;
 
     my @Confdirs = $ENV{HARNESS_ACTIVE} ?
         ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
