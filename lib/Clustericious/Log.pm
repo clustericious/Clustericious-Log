@@ -40,7 +40,7 @@ Here is a sample $HOME/etc/log4perl.conf :
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 sub import {
     my $class = shift;
