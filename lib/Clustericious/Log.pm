@@ -50,7 +50,7 @@ sub import {
         init_logging($app_name);
     }
     no strict 'refs';
-    *{"${dest}::$_"} = *{"${class}::$_"} for qw/TRACE INFO DEBUG ERROR WARN FATAL LOGDIE/;
+    *{"${dest}::$_"} = *{"${class}::$_"} for qw/TRACE INFO DEBUG ERROR WARN FATAL LOGDIE get_logger/;
 }
 
 =over
