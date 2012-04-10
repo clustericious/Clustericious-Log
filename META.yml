@@ -15,7 +15,7 @@ name: Clustericious-Log
 provides:
   Clustericious::Log:
     file: lib/Clustericious/Log.pm
-    version: 0.08
+    version: 0.09
 requires:
   File::ReadBackwards: 0
   List::Util: 0
@@ -23,4 +23,4 @@ requires:
   MojoX::Log::Log4perl: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.08
+version: 0.09
