@@ -43,6 +43,8 @@ Here is a sample $HOME/etc/log4perl.conf :
 
 =head1 METHODS
 
+=over
+
 =cut
 
 our $VERSION = '0.09';
@@ -57,8 +59,6 @@ sub import {
     no strict 'refs';
     *{"${dest}::$_"} = *{"${class}::$_"} for qw/TRACE INFO DEBUG ERROR WARN FATAL LOGDIE get_logger/;
 }
-
-=over
 
 =item init_logging
 
@@ -164,8 +164,6 @@ The following variables affect logging :
     MOJO_APP
     HARNESS_ACTIVE
     CLUSTERICIOUS_TEST_CONF_DIR
-
-=back
 
 =head1 NOTES
 
