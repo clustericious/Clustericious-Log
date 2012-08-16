@@ -165,6 +165,10 @@ The following variables affect logging :
 
 =back
 
+=head1 NOTES
+
+This is a beta release, the API may change without notice.
+
 =head1 SEE ALSO
 
 L<Log::Log4perl>, L<Clustericious>
