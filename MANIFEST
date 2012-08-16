@@ -5,6 +5,7 @@ lib/Clustericious/Log.pm
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
+META.json
 META.yml
 README
 t/00-load.t
