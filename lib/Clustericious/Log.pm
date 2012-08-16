@@ -10,20 +10,24 @@ use strict;
 
 =head1 NAME
 
-Clustericious::Log - Manage logging for clustericious CIs.
+Clustericious::Log - A Log::Log4perl wrapper for use with Clustericious.
 
 =cut
 
 =head1 SYNOPSIS
 
-use Clustericious::Log -init_logging => "appname";
+    use Clustericious::Log -init_logging => "appname";
+
+    use Clustericious::Log;
+    INFO "Hi there!";
 
 =head1 DESCRIPTION
 
-Uses log4perl to do logging, and looks for log4perl.conf
-in /etc, /util/etc, and $HOME/etc.
-
-Also imports TRACE DEBUG ERROR, etc. like using Log::Log4perl qw/:easy/.
+This is a simple wrapper around Log::Log4perl for use with
+Clustericious.  It handles initialization and exporting of
+convenient logging functions, and a default set of logging
+patterns.  It also makes the name of the application available
+for logging patterns (see the example).
 
 =head1 EXAMPLE
 
@@ -35,6 +39,7 @@ Here is a sample $HOME/etc/log4perl.conf :
     log4perl.appender.LOGFILE.mode=append
     log4perl.appender.LOGFILE.layout=PatternLayout
     log4perl.appender.LOGFILE.layout.ConversionPattern=[%d{HH:mm:ss}] [%8.8Z] %C (%F{1}+%L) %5p: %m%n
+    # Note 'Z' is the name of the Clustericious application.
 
 =head1 METHODS
 
@@ -58,7 +63,7 @@ sub import {
 =item init_logging
 
 Start logging.  Looks for log4perl.conf or $app.log4perl.conf
-in ~, ~/etc, /util/etc and /etc.
+in $HOME/etc, /util/etc and /etc.
 
 =cut
 
@@ -148,11 +153,21 @@ sub tail {
     return join '', @lines;
 }
 
+=head1 ENVIRONMENT
+
+The following variables affect logging :
+
+    LOG_LEVEL
+    LOG_FILE
+    MOJO_APP
+    HARNESS_ACTIVE
+    CLUSTERICIOUS_TEST_CONF_DIR
+
 =back
 
 =head1 SEE ALSO
 
-Log::Log4perl
+L<Log::Log4perl>, L<Clustericious>
 
 =cut
 
