@@ -153,6 +153,8 @@ sub tail {
     return join '', @lines;
 }
 
+=back
+
 =head1 ENVIRONMENT
 
 The following variables affect logging :
