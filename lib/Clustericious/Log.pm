@@ -61,6 +61,8 @@ in $HOME/etc, /util/etc and /etc.
 
 =cut
 
+our $harness_active = $ENV{HARNESS_ACTIVE};
+
 our $initPid;
 sub init_logging {
     my $app_name = shift;
@@ -71,18 +73,18 @@ sub init_logging {
     $Log::Log4perl::Logger::INITIALIZED = 0 if $initPid && $initPid != $$;
     $initPid = $$;
 
-    my @Confdirs = $ENV{HARNESS_ACTIVE} ?
+    my @Confdirs = $harness_active ?
         ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
         ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
 
     # Logging
-    $ENV{LOG_LEVEL} ||= ( $ENV{HARNESS_ACTIVE} ? "WARN" : "DEBUG" );
+    $ENV{LOG_LEVEL} ||= ( $harness_active ? "WARN" : "DEBUG" );
 
     my $l4p_dir; # dir with log config file.
     my $l4p_pat; # pattern for screen logging
     my $l4p_file; # file (global or app specific)
 
-    if ($ENV{HARNESS_ACTIVE}) {
+    if ($harness_active) {
         $l4p_pat = "# %5p: %m%n";
     } else  {
         $l4p_dir  = first { -d $_ && (-e "$_/log4perl.conf" || -e "$app_name.log4perl.conf") } @Confdirs;
