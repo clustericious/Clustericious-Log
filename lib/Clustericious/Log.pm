@@ -1,25 +1,21 @@
 package Clustericious::Log;
 
-use List::Util qw/first/;
-use Log::Log4perl qw/:easy/;
+use strict;
+use warnings;
+use List::Util qw( first );
+use Log::Log4perl qw( :easy );
 use MojoX::Log::Log4perl;
 use File::ReadBackwards;
 
-use warnings;
-use strict;
-
-=head1 NAME
-
-Clustericious::Log - A Log::Log4perl wrapper for use with Clustericious.
-
-=cut
+# ABSTRACT: A Log::Log4perl wrapper for use with Clustericious.
+# VERSION
 
 =head1 SYNOPSIS
 
-    use Clustericious::Log -init_logging => "appname";
+ use Clustericious::Log -init_logging => "appname";
 
-    use Clustericious::Log;
-    INFO "Hi there!";
+ use Clustericious::Log;
+ INFO "Hi there!";
 
 =head1 DESCRIPTION
 
@@ -33,21 +29,19 @@ for logging patterns (see the example).
 
 Here is a sample $HOME/etc/log4perl.conf :
 
-    log4perl.rootLogger=TRACE, LOGFILE
-    log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
-    log4perl.appender.LOGFILE.filename=/tmp/some.log
-    log4perl.appender.LOGFILE.mode=append
-    log4perl.appender.LOGFILE.layout=PatternLayout
-    log4perl.appender.LOGFILE.layout.ConversionPattern=[%d{HH:mm:ss}] [%8.8Z] %C (%F{1}+%L) %5p: %m%n
-    # Note 'Z' is the name of the Clustericious application.
+ log4perl.rootLogger=TRACE, LOGFILE
+ log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
+ log4perl.appender.LOGFILE.filename=/tmp/some.log
+ log4perl.appender.LOGFILE.mode=append
+ log4perl.appender.LOGFILE.layout=PatternLayout
+ log4perl.appender.LOGFILE.layout.ConversionPattern=[%d{HH:mm:ss}] [%8.8Z] %C (%F{1}+%L) %5p: %m%n
+ # Note 'Z' is the name of the Clustericious application.
 
 =head1 METHODS
 
 =over
 
 =cut
-
-our $VERSION = '0.10';
 
 sub import {
     my $class = shift;
@@ -159,15 +153,21 @@ sub tail {
 
 The following variables affect logging :
 
-    LOG_LEVEL
-    LOG_FILE
-    MOJO_APP
-    HARNESS_ACTIVE
-    CLUSTERICIOUS_TEST_CONF_DIR
+ LOG_LEVEL
+ LOG_FILE
+ MOJO_APP
+ HARNESS_ACTIVE
+ CLUSTERICIOUS_TEST_CONF_DIR
 
 =head1 NOTES
 
 This is a beta release, the API may change without notice.
+
+=head1 AUTHORS
+
+Current maintainer: Graham Ollis <plicease@cpan.org>
+
+Original author: Brian Duggan
 
 =head1 SEE ALSO
 
