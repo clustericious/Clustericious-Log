@@ -60,16 +60,19 @@ sub import
   print $fh "log4perl.appender.FileX.mode=append\n";
   print $fh "log4perl.appender.FileX.layout=PatternLayout\n";
   print $fh "log4perl.appender.FileX.layout.ConversionPattern=[%P %p{1} %rms] %F:%L %m%n\n";
+  print $fh "log4perl.appender.FileX.Filter=MatchFileX\n";
   
   print $fh "log4perl.appender.NoteX=Log::Log4perl::Appender::TAP\n";
   print $fh "log4perl.appender.NoteX.method=note\n";
   print $fh "log4perl.appender.NoteX.layout=PatternLayout\n";
-  print $fh "log4perl.appender.NoteX.layout.ConversionPattern=Note %5p %m%n\n";
+  print $fh "log4perl.appender.NoteX.layout.ConversionPattern=%5p %m%n\n";
+  print $fh "log4perl.appender.NoteX.Filter=MatchNoteX\n";
 
   print $fh "log4perl.appender.DiagX=Log::Log4perl::Appender::TAP\n";
   print $fh "log4perl.appender.DiagX.method=diag\n";
   print $fh "log4perl.appender.DiagX.layout=PatternLayout\n";
-  print $fh "log4perl.appender.DiagX.layout.ConversionPattern=Diag %5p %m%n\n";
+  print $fh "log4perl.appender.DiagX.layout.ConversionPattern=%5p %m%n\n";
+  print $fh "log4perl.appender.DiagX.Filter=MatchDiagX\n";
   
   close $fh;  
 }
