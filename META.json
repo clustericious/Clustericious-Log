@@ -1,0 +1,60 @@
+{
+   "abstract" : "A Log::Log4perl wrapper for use with Clustericious.",
+   "author" : [
+      "Graham Ollis <plicease@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300021, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Clustericious-Log",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Carp" : "0",
+            "File::HomeDir" : "0.91",
+            "File::ReadBackwards" : "0",
+            "List::Util" : "0",
+            "Log::Log4perl" : "0",
+            "Log::Log4perl::Appender::TAP" : "0",
+            "MojoX::Log::Log4perl" : "0",
+            "Test::Builder::Module" : "0",
+            "perl" : "v5.10.0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/plicease/clustericious-log/issues"
+      },
+      "homepage" : "http://perl.wdlabs.com/Clustericious-Log/",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/plicease/clustericious-log.git",
+         "web" : "https://github.com/plicease/clustericious-log"
+      }
+   },
+   "version" : "0.11"
+}
+
