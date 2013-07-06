@@ -2,6 +2,7 @@ Revision history for Clustericious-Log
 
 {{$NEXT}}
   - migrated to Dist::Zilla
+  - added Test::Clustericious::log
 
 0.10    Thu Aug 16 09:55:01 EDT 2012
         first release
