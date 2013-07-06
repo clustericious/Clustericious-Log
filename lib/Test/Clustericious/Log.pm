@@ -2,6 +2,7 @@ package Test::Clustericious::Log;
 
 use strict;
 use warnings;
+use v5.10;
 
 BEGIN {
   unless($INC{'File/HomeDir/Test.pm'})
@@ -14,6 +15,7 @@ BEGIN {
 use File::HomeDir;
 use Test::Builder::Module;
 use Clustericious::Log ();
+use Carp qw( carp );
 
 # ABSTRACT: Clustericious logging in tests.
 # VERSION
@@ -28,7 +30,20 @@ use Clustericious::Log ();
 
 sub import
 {
-  my($class) = @_;
+  my($class) = shift;
+
+  # first caller wins
+  state $counter = 0;
+  if($counter++)
+  {
+    my $caller = caller;
+    unless($caller eq 'Test::Clustericious::Cluster')
+    {
+      my $tb = Test::Builder::Module->builder;
+      $tb->diag("you must use Test::Clustericious::Log before Test::Clustericious::Cluster");
+    }
+    return;
+  }
 
   $Clustericious::Log::harness_active = 0;
 
@@ -42,9 +57,45 @@ sub import
     DiagX => [ 'ERROR', 'FATAL' ],
   };
 
+  my $args;
+  if(@_ == 1)
+  {
+    die;
+  }
+  else
+  {
+    $args = { @_ };
+  }
+  
+  foreach my $type (qw( file note diag ))
+  {
+    if(defined $args->{$type})
+    {
+      my $name = ucfirst($type) . 'X';
+      if($args->{$type} =~ /^(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)(..(TRACE|DEBUG|INFO|WARN|ERROR|FATAL))$/)
+      {
+        my($min,$max) = ($1,$3);
+        $max = $min unless $max;
+        $config->{$name} = [ $min, $max ];
+      }
+      elsif($args->{$type} eq 'NONE')
+      {
+        delete $config->{$name};
+      }
+      else
+      {
+        carp "illegal log range: " . $args->{$type};
+      }
+    }
+  }
+  
   open my $fh, '>', "$home/etc/log4perl.conf";
 
-  print $fh "log4perl.rootLogger=TRACE, FileX, NoteX, DiagX\n";
+  print $fh "log4perl.rootLogger=TRACE, ";
+  print $fh "FileX, " if defined $config->{FileX};
+  print $fh "NoteX, " if defined $config->{NoteX};
+  print $fh "DiagX, " if defined $config->{DiagX};
+  print $fh "\n";
   
   while(my($appender, $levels) = each %$config)
   {
