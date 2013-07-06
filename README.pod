@@ -1,0 +1,89 @@
+=pod
+
+=head1 NAME
+
+Clustericious::Log - A Log::Log4perl wrapper for use with Clustericious.
+
+=head1 VERSION
+
+version 0.11
+
+=head1 SYNOPSIS
+
+ use Clustericious::Log -init_logging => "appname";
+
+ use Clustericious::Log;
+ INFO "Hi there!";
+
+=head1 DESCRIPTION
+
+This is a simple wrapper around Log::Log4perl for use with
+Clustericious.  It handles initialization and exporting of
+convenient logging functions, and a default set of logging
+patterns.  It also makes the name of the application available
+for logging patterns (see the example).
+
+=head1 EXAMPLE
+
+Here is a sample $HOME/etc/log4perl.conf :
+
+ log4perl.rootLogger=TRACE, LOGFILE
+ log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
+ log4perl.appender.LOGFILE.filename=/tmp/some.log
+ log4perl.appender.LOGFILE.mode=append
+ log4perl.appender.LOGFILE.layout=PatternLayout
+ log4perl.appender.LOGFILE.layout.ConversionPattern=[%d{HH:mm:ss}] [%8.8Z] %C (%F{1}+%L) %5p: %m%n
+ # Note 'Z' is the name of the Clustericious application.
+
+=head1 METHODS
+
+=over
+
+=item init_logging
+
+Start logging.  Looks for log4perl.conf or $app.log4perl.conf
+in $HOME/etc, /util/etc and /etc.
+
+=item tail
+
+Returns a string with the last $n lines of the logfile.
+
+If multiple log files are defined, it only uses the first one alphabetically.
+
+=back
+
+=head1 ENVIRONMENT
+
+The following variables affect logging :
+
+ LOG_LEVEL
+ LOG_FILE
+ MOJO_APP
+ HARNESS_ACTIVE
+ CLUSTERICIOUS_TEST_CONF_DIR
+
+=head1 NOTES
+
+This is a beta release, the API may change without notice.
+
+=head1 AUTHORS
+
+Current maintainer: Graham Ollis <plicease@cpan.org>
+
+Original author: Brian Duggan
+
+=head1 SEE ALSO
+
+L<Log::Log4perl>, L<Clustericious>
+
+=head1 AUTHOR
+
+Graham Ollis <plicease@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2013 by NASA GSFC.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
