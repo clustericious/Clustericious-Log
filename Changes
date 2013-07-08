@@ -1,6 +1,7 @@
 Revision history for Clustericious-Log
 
 {{$NEXT}}
+  - use File::HomeDir instead of $ENV{HOME} for portability
 
 0.11      2013-07-05 22:22:43 America/New_York
   - migrated to Dist::Zilla

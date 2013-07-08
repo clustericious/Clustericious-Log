@@ -6,6 +6,7 @@ use List::Util qw( first );
 use Log::Log4perl qw( :easy );
 use MojoX::Log::Log4perl;
 use File::ReadBackwards;
+use File::HomeDir;
 
 # ABSTRACT: A Log::Log4perl wrapper for use with Clustericious.
 # VERSION
@@ -27,7 +28,7 @@ for logging patterns (see the example).
 
 =head1 EXAMPLE
 
-Here is a sample $HOME/etc/log4perl.conf :
+Here is a sample ~/etc/log4perl.conf :
 
  log4perl.rootLogger=TRACE, LOGFILE
  log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
@@ -57,7 +58,7 @@ sub import {
 =item init_logging
 
 Start logging.  Looks for log4perl.conf or $app.log4perl.conf
-in $HOME/etc, /util/etc and /etc.
+in ~/etc, /util/etc and /etc.
 
 =cut
 
@@ -73,9 +74,10 @@ sub init_logging {
     $Log::Log4perl::Logger::INITIALIZED = 0 if $initPid && $initPid != $$;
     $initPid = $$;
 
+    my $home = File::HomeDir->my_home;
     my @Confdirs = $harness_active ?
         ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
-        ($ENV{HOME}, "$ENV{HOME}/etc", "/util/etc", "/etc" );
+        ($home, "$home/etc", "/util/etc", "/etc" );
 
     # Logging
     $ENV{LOG_LEVEL} ||= ( $harness_active ? "WARN" : "DEBUG" );
