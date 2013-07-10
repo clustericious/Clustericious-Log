@@ -22,7 +22,27 @@ use Carp qw( carp );
 
 =head1 SYNOPSIS
 
+ use Test::Clustericious::Log;
+ use Test::More;
+ use MyClustericiousApp;
+ 
+ my $app = MyClustericiousApp->new;
+ 
+ ok $test, 'test description';
+ ...
+
 =head1 DESCRIPTION
+
+This module redirects the log4perl output from a 
+L<Clustericious> application to TAP using 
+L<Test::Builder>.  By default it sends DEBUG to WARN messages
+to C<note> and ERROR to FATAL to C<diag>, so you should only
+see error and fatal messages if you run C<prove -l> on your test
+but will see debug and warn messages if you run C<prove -lv>.
+
+If the test fails for any reason, the entire log file will be
+printed out using C<diag> when the test is complete.  This
+is useful for CPAN testers reports.
 
 =cut
 
