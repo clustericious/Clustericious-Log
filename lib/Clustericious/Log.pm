@@ -9,7 +9,7 @@ use File::ReadBackwards;
 use File::HomeDir;
 
 # ABSTRACT: A Log::Log4perl wrapper for use with Clustericious.
-our $VERSION = '0.12'; # VERSION
+our $VERSION = '0.12_01'; # VERSION
 
 
 sub import {
@@ -51,7 +51,7 @@ sub init_logging {
     if ($harness_active) {
         $l4p_pat = "# %5p: %m%n";
     } else  {
-        $l4p_dir  = first { -d $_ && (-e "$_/log4perl.conf" || -e "$app_name.log4perl.conf") } @Confdirs;
+        $l4p_dir  = first { -d $_ && (-e "$_/log4perl.conf" || -e "$_/$app_name.log4perl.conf") } @Confdirs;
         $l4p_pat  = "[%d] [%Z %H %P] %5p: %m%n";
         if ($l4p_dir) {
             $l4p_file = first {-e "$l4p_dir/$_"} ("$app_name.log4perl.conf", "log4perl.conf");
@@ -118,7 +118,7 @@ Clustericious::Log - A Log::Log4perl wrapper for use with Clustericious.
 
 =head1 VERSION
 
-version 0.12
+version 0.12_01
 
 =head1 SYNOPSIS
 
@@ -178,19 +178,15 @@ The following variables affect logging :
 
 This is a beta release, the API may change without notice.
 
-=head1 AUTHORS
-
-Current maintainer: Graham Ollis <plicease@cpan.org>
-
-Original author: Brian Duggan
-
 =head1 SEE ALSO
 
 L<Log::Log4perl>, L<Clustericious>
 
 =head1 AUTHOR
 
-Graham Ollis <plicease@cpan.org>
+original author: Brian Duggan
+
+current maintainer: Graham Ollis <plicease@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 

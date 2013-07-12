@@ -2,7 +2,7 @@ NAME
     Clustericious::Log - A Log::Log4perl wrapper for use with Clustericious.
 
 VERSION
-    version 0.12
+    version 0.12_01
 
 SYNOPSIS
      use Clustericious::Log -init_logging => "appname";
@@ -51,16 +51,13 @@ ENVIRONMENT
 NOTES
     This is a beta release, the API may change without notice.
 
-AUTHORS
-    Current maintainer: Graham Ollis <plicease@cpan.org>
-
-    Original author: Brian Duggan
-
 SEE ALSO
     Log::Log4perl, Clustericious
 
 AUTHOR
-    Graham Ollis <plicease@cpan.org>
+    original author: Brian Duggan
+
+    current maintainer: Graham Ollis <plicease@cpan.org>
 
 COPYRIGHT AND LICENSE
     This software is copyright (c) 2013 by NASA GSFC.
