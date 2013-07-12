@@ -1,6 +1,7 @@
 Revision history for Clustericious-Log
 
 {{$NEXT}}
+  - fix bug finding YourApp.log4perl.conf config
 
 0.12      2013-07-07 21:35:22 America/New_York
   - use File::HomeDir instead of $ENV{HOME} for portability
