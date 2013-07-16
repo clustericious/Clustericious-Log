@@ -3,6 +3,7 @@ language: perl
 install:
   - cpanm -n Log::Log4perl
   - cpanm -n Log::Log4perl::CommandLine
+  - cpanm -n MojoX::Log::Log4perl
 
 script: HARNESS_IS_VERBOSE=1 YC_LIVE_TESTS=1 prove -lv t
 
