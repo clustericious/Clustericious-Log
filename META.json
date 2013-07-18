@@ -43,7 +43,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/plicease/clustericious-log/issues"
@@ -55,6 +55,6 @@
          "web" : "https://github.com/plicease/clustericious-log"
       }
    },
-   "version" : "0.12_01"
+   "version" : "0.14"
 }
 

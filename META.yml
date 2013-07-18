@@ -28,4 +28,4 @@ resources:
   bugtracker: https://github.com/plicease/clustericious-log/issues
   homepage: http://perl.wdlabs.com/Clustericious-Log/
   repository: git://github.com/plicease/clustericious-log.git
-version: 0.12_01
+version: 0.14
