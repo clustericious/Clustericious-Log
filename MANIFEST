@@ -10,6 +10,8 @@ dist.ini
 lib/Clustericious/Log.pm
 lib/Test/Clustericious/Log.pm
 t/00-load.t
+t/00_diag.t
+t/00_diag.txt
 t/test.t
 xt/release/build_environment.t
 xt/release/changes.t
@@ -22,3 +24,4 @@ xt/release/pod_spelling_common.t
 xt/release/pod_spelling_system.t
 xt/release/release.yml
 xt/release/strict.t
+xt/release/version.t

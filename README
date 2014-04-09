@@ -1,16 +1,21 @@
 NAME
-    Clustericious::Log - A Log::Log4perl wrapper for use with Clustericious.
+
+    Clustericious::Log - A Log::Log4perl wrapper for use with
+    Clustericious.
 
 VERSION
-    version 0.14
+
+    version 0.15
 
 SYNOPSIS
-     use Clustericious::Log -init_logging => "appname";
 
+     use Clustericious::Log -init_logging => "appname";
+    
      use Clustericious::Log;
      INFO "Hi there!";
 
 DESCRIPTION
+
     This is a simple wrapper around Log::Log4perl for use with
     Clustericious. It handles initialization and exporting of convenient
     logging functions, and a default set of logging patterns. It also makes
@@ -18,6 +23,7 @@ DESCRIPTION
     example).
 
 EXAMPLE
+
     Here is a sample ~/etc/log4perl.conf :
 
      log4perl.rootLogger=TRACE, LOGFILE
@@ -29,37 +35,43 @@ EXAMPLE
      # Note 'Z' is the name of the Clustericious application.
 
 METHODS
+
     init_logging
-        Start logging. Looks for log4perl.conf or $app.log4perl.conf in
-        ~/etc, /util/etc and /etc.
+
+      Start logging. Looks for log4perl.conf or $app.log4perl.conf in
+      ~/etc, /util/etc and /etc.
 
     tail
-        Returns a string with the last $n lines of the logfile.
 
-        If multiple log files are defined, it only uses the first one
-        alphabetically.
+      Returns a string with the last $n lines of the logfile.
+
+      If multiple log files are defined, it only uses the first one
+      alphabetically.
 
 ENVIRONMENT
+
     The following variables affect logging :
 
      LOG_LEVEL
      LOG_FILE
      MOJO_APP
-     HARNESS_ACTIVE
-     CLUSTERICIOUS_TEST_CONF_DIR
 
 NOTES
+
     This is a beta release, the API may change without notice.
 
 SEE ALSO
+
     Log::Log4perl, Clustericious
 
 AUTHOR
+
     original author: Brian Duggan
 
     current maintainer: Graham Ollis <plicease@cpan.org>
 
 COPYRIGHT AND LICENSE
+
     This software is copyright (c) 2013 by NASA GSFC.
 
     This is free software; you can redistribute it and/or modify it under

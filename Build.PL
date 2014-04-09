@@ -7,8 +7,7 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   "build_requires" => {
-    "Module::Build" => "0.3601",
-    "Test::More" => 0
+    "Module::Build" => "0.3601"
   },
   "configure_requires" => {
     "Module::Build" => "0.3601"
@@ -18,7 +17,7 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "Clustericious-Log",
-  "dist_version" => "0.14",
+  "dist_version" => "0.15",
   "license" => "perl",
   "module_name" => "Clustericious::Log",
   "recommends" => {},
@@ -34,9 +33,23 @@ my %module_build_args = (
     "Test::Builder::Module" => 0,
     "perl" => "v5.10.0"
   },
-  "script_files" => []
+  "script_files" => [],
+  "test_requires" => {
+    "Test::More" => 0
+  }
 );
 
+
+my %fallback_build_requires = (
+  "Module::Build" => "0.3601",
+  "Test::More" => 0
+);
+
+
+unless ( eval { Module::Build->VERSION(0.4004) } ) {
+  delete $module_build_args{test_requires};
+  $module_build_args{build_requires} = \%fallback_build_requires;
+}
 
 my $build = Module::Build->new(%module_build_args);
 
