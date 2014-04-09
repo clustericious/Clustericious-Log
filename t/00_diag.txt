@@ -1,0 +1,10 @@
+Carp
+File::HomeDir
+File::ReadBackwards
+List::Util
+Log::Log4perl
+Log::Log4perl::Appender::TAP
+Module::Build
+MojoX::Log::Log4perl
+Test::Builder::Module
+Test::More
