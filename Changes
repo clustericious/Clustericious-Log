@@ -1,6 +1,8 @@
 Revision history for Clustericious-Log
 
 {{$NEXT}}
+
+0.15      2014-04-09 12:09:45 America/New_York
   - remove test harness detection
 
 0.14      2013-07-18 09:18:51 America/New_York
