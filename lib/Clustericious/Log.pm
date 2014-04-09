@@ -62,8 +62,6 @@ in ~/etc, /util/etc and /etc.
 
 =cut
 
-our $harness_active = $ENV{HARNESS_ACTIVE};
-
 our $initPid;
 sub init_logging {
     my $app_name = shift;
@@ -75,25 +73,19 @@ sub init_logging {
     $initPid = $$;
 
     my $home = File::HomeDir->my_home;
-    my @Confdirs = $harness_active ?
-        ($ENV{CLUSTERICIOUS_TEST_CONF_DIR}) :
-        ($home, "$home/etc", "/util/etc", "/etc" );
+    my @Confdirs = ($home, "$home/etc", "/util/etc", "/etc" );
 
     # Logging
-    $ENV{LOG_LEVEL} ||= ( $harness_active ? "WARN" : "DEBUG" );
+    $ENV{LOG_LEVEL} ||= 'WARN';
 
     my $l4p_dir; # dir with log config file.
     my $l4p_pat; # pattern for screen logging
     my $l4p_file; # file (global or app specific)
 
-    if ($harness_active) {
-        $l4p_pat = "# %5p: %m%n";
-    } else  {
-        $l4p_dir  = first { -d $_ && (-e "$_/log4perl.conf" || -e "$_/$app_name.log4perl.conf") } @Confdirs;
-        $l4p_pat  = "[%d] [%Z %H %P] %5p: %m%n";
-        if ($l4p_dir) {
-            $l4p_file = first {-e "$l4p_dir/$_"} ("$app_name.log4perl.conf", "log4perl.conf");
-        }
+    $l4p_dir  = first { -d $_ && (-e "$_/log4perl.conf" || -e "$_/$app_name.log4perl.conf") } @Confdirs;
+    $l4p_pat  = "[%d] [%Z %H %P] %5p: %m%n";
+    if ($l4p_dir) {
+        $l4p_file = first {-e "$l4p_dir/$_"} ("$app_name.log4perl.conf", "log4perl.conf");
     }
 
     Log::Log4perl::Layout::PatternLayout::add_global_cspec('Z', sub {$app_name});
@@ -160,8 +152,6 @@ The following variables affect logging :
  LOG_LEVEL
  LOG_FILE
  MOJO_APP
- HARNESS_ACTIVE
- CLUSTERICIOUS_TEST_CONF_DIR
 
 =head1 NOTES
 
