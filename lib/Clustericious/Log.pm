@@ -11,6 +11,12 @@ use File::HomeDir;
 # ABSTRACT: A Log::Log4perl wrapper for use with Clustericious.
 # VERSION
 
+=head1 MOVED
+
+This is the old version of L<Clustericious::Log> from before it was merged
+back into core L<Clustericious>.  Please see the L<Clustericious> main repository
+here: L<https://github.com/clustericious/Clustericious>.
+
 =head1 SYNOPSIS
 
  use Clustericious::Log -init_logging => "appname";
